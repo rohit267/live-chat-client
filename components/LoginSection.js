@@ -1,14 +1,23 @@
 import { useState } from "react";
+import axios from "axios";
+import Cookie from "js-cookie";
+import Router from "next/router";
 
 function LoginSection(props) {
   const [uname, setUName] = useState(null);
   const [rName, setRname] = useState(null);
 
   function chatInit(e) {
-      console.log('stated')
+    console.log("stated");
     e.preventDefault();
     let postData = { uname, rName };
-    // wind;
+    console.log(postData);
+    axios.post("http://localhost:5000/newJoin", postData).then((res) => {
+      // let resData=atob(res.data.key);
+      let resData = res.data.key;
+      Cookie.set("_chatData", resData);
+      Router.push("/chatRoom");
+    });
   }
 
   return (
@@ -34,12 +43,12 @@ function LoginSection(props) {
               <select
                 className="form-control w-50 m-auto"
                 name="chatType"
-                defaultValue="0"
-                onSelect={(e) => setRname(e.target.value)}
+                defaultValue="none"
+                onChange={(e) => setRname(e.target.value)}
               >
-                <option value="0">Select Chatroom</option>
-                <option value="1">Javascript</option>
-                <option value="2">PHP</option>
+                <option value="none">Select Chatroom</option>
+                <option value="js">Javascript</option>
+                <option value="php">PHP</option>
               </select>
               <br />
               <button type="submit" name="submit" className="btn btn btn-info">
